@@ -16,7 +16,6 @@ function dragNdrop(e, obj) {
     moveAt(e);
     document.body.onmousemove = function (e) {
         e.preventDefault();
-        console.log(111)
         moveAt(e);
         checkDown(e);
     };
@@ -26,8 +25,8 @@ function dragNdrop(e, obj) {
             if (isOver(drop)) {
                  let div = createElement('div', 'episode');
                 dragContent.appendChild(div);
-                let p = createElement('p', 'title', `${episode}) ${episodeTitle}`);
-                let meta = createElement('p', 'meta', `<p>${serial}</p><p>Episode released: ${date}</p> <b>Rating: ${(rating=='N/A')?'Unknown':rating}</b>`);
+                let p = createElement('p', 'title', ` ${episodeTitle}`);
+                let meta = createElement('p', 'meta', `<div class="col"><p>${serial}</p><p>Episode released: ${date}</p> </div><b>Rating: ${(rating=='N/A')?'Unknown':rating}</b>`);
                 div.appendChild(p);
                 div.appendChild(meta);
                 
@@ -113,7 +112,7 @@ function dragNdrop(e, obj) {
             episodeTitle = obj.dataset.episodetitle;
             episode = obj.dataset.episode;
             rating = obj.dataset.rating;
-        console.log(serial,date,episode,episodeTitle,rating);
+            rating = obj.dataset.rating;
         return createElement('div', 'tmp');
 
     }

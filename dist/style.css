@@ -50,9 +50,16 @@ body{
 .tmp{
     width: 300px;
     height: 50px;
-    background-color: rgb(124,124,124);
-    border: 2px dashed rgb(100,100,100);
+    background-color: rgba(124,124,124,0.5);
+    border: 2px dashed rgba(100,100,100,0.5);
     border-radius: 10px;
     position: absolute;
     z-index: 100;    
+}
+.meta>.col>p {
+    padding: 0;
+    margin: 0;
+    }
+.meta>.col{
+    justify-content: flex-end;
 }

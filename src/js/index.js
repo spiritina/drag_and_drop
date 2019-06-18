@@ -30,7 +30,6 @@ function getFilms(id, season = 1, callback) {
         films = JSON.parse(this.responseText);
         console.log(films);
         let {totalSeasons} = films;
-        console.log(totalSeasons);
         drawFilms(films);
         callback(totalSeasons);
 
@@ -61,7 +60,7 @@ function getFilms(id, season = 1, callback) {
                 let meta = createElement('p', 'meta', `Episode released: ${Released} <b>Rating: ${(imdbRating=='N/A')?'Unknown':imdbRating}</b>`);
                 div.appendChild(p);
                 div.appendChild(meta);
-                div.addEventListener('mousedown',function(e){
+               div.addEventListener('mousedown',function(e){
                     dragNdrop(e,this);
                 });
                 
