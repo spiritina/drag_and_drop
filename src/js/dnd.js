@@ -3,7 +3,7 @@ import {
     setAttributes
 } from './creatingFunctions';
 
-let serial, date, episodeTitle, episode, rating;
+let serial, date, episodeTitle, episode, rating, enableHandler;
 
 function dragNdrop(e, obj) {
     let drop = document.getElementsByClassName('drop')[0],
@@ -16,21 +16,33 @@ function dragNdrop(e, obj) {
     moveAt(e);
     document.body.onmousemove = function (e) {
         e.preventDefault();
-        moveAt(e);
-        checkDown(e);
+        if (enableHandler) {
+
+            moveAt(e);
+            checkDown(e);
+            enableHandler = false;
+        }
     };
+    window.setInterval(function () {
+        enableHandler = true;
+    }, 100);
 
     function checkDown(e) {
         document.body.onmouseup = function () {
             if (isOver(drop)) {
-                 let div = createElement('div', 'episode');
-                dragContent.appendChild(div);
+                let div = createElement('div', 'episode');
                 let p = createElement('p', 'title', ` ${episodeTitle}`);
                 let meta = createElement('p', 'meta', `<div class="col"><p>${serial}</p><p>Episode released: ${date}</p> </div><b>Rating: ${(rating=='N/A')?'Unknown':rating}</b>`);
+                let deleteBtn = createElement('button', 'delete');
+                deleteBtn.setAttribute('type', 'button');
+
                 div.appendChild(p);
                 div.appendChild(meta);
-                
-                let items = drop.children;
+                div.appendChild(deleteBtn);
+                deleteBtn.addEventListener('click', function () {
+                    this.parentNode.remove();
+                });
+                let items = dropContent.children;
                 if (items.length) {
                     for (let i = 0; i < items.length; i++) {
                         if (isOver(items[i])) {
@@ -38,24 +50,19 @@ function dragNdrop(e, obj) {
                                 dropContent.insertBefore(div, items[i]);
                                 break;
                             } else {
-                                if (items[i + 1]) {
-                                    dropContent.insertBefore(div, (items[i + 1]))
-                                    break;
-                                } else {
-                                    dropContent.appendChild(div);
-                                    break;
-                                }
+                                dropContent.insertBefore(div, items[i+1]);
+                                break;
                             }
-                        } else {
+                        } else if (i == items.length - 1) {
                             dropContent.appendChild(div);
-                            break;
                         }
                     }
+
                 } else {
                     dropContent.appendChild(div);
                 }
-                document.body.onmouseup = null;
-            }; 
+            };
+            document.body.onmouseup = null;
             newItem.remove();
         };
 
@@ -108,11 +115,11 @@ function dragNdrop(e, obj) {
     function createItem(e) {
 
         serial = obj.dataset.serietitle;
-            date = obj.dataset.data;
-            episodeTitle = obj.dataset.episodetitle;
-            episode = obj.dataset.episode;
-            rating = obj.dataset.rating;
-            rating = obj.dataset.rating;
+        date = obj.dataset.data;
+        episodeTitle = obj.dataset.episodetitle;
+        episode = obj.dataset.episode;
+        rating = obj.dataset.rating;
+        rating = obj.dataset.rating;
         return createElement('div', 'tmp');
 
     }

@@ -24,7 +24,7 @@ body{
     border: 1px solid rgb(164,164,164);
     border-radius: 20px;
     box-shadow: 6px 4px 10px rgba(124,124,124,.6);
-    min-width: 350px;
+    min-width: 450px;
     min-height: 600px;
     box-sizing: border-box;
     padding: 25px;
@@ -32,6 +32,7 @@ body{
 .episode{
     cursor: grab;
     padding: 5px;
+    position: relative;
 }
 
 .episode:hover{
@@ -44,7 +45,7 @@ body{
 }
 #dragContent,
 #dropContent{
-    max-height: 70vh;
+    max-height: 60vh;
     overflow-y: scroll;
 }
 .tmp{
@@ -62,4 +63,13 @@ body{
     }
 .meta>.col{
     justify-content: flex-end;
+}
+.delete{
+    position: absolute;
+    top:7px;
+    right: 7px;
+    height: 10px;
+    width: 10px;
+    padding: 0;
+    background-color: orangered;
 }

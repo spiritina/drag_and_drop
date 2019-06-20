@@ -28,23 +28,23 @@ function getFilms(id, season = 1, callback) {
 
     xhr.onload = function () {
         films = JSON.parse(this.responseText);
-        console.log(films);
         let {totalSeasons} = films;
         drawFilms(films);
         callback(totalSeasons);
 
         function drawFilms(films) {
             dragContent.innerHTML='';
-            let h2 = document.createElement('h2');
+            if(document.getElementsByClassName('head')[0]){
+                document.getElementsByClassName('head')[0].remove();
+            }
             let {Season} = films; 
-            h2.innerHTML = `Season ${Season}`;
+            let h2 = createElement('h2','head',`Season ${Season}`);
             let {Episodes, Title} = films;
             serieTitle = Title;
-            dragContent.appendChild(h2);
+            drag.insertBefore(h2,dragContent);
             for (let i = 0; i < Episodes.length; i++) {
                 drawEpisode(Episodes[i]);
             }
-
             function drawEpisode(film) {
             let {Title,Released,Episode,imdbRating} = film;
                 let div = createElement('div', 'episode');
