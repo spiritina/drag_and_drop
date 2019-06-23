@@ -1,9 +1,17 @@
 import _ from 'lodash';
-import {createElement, setAttributes} from './creatingFunctions';
-import dragNdrop from './dnd'
+import { createElement, setAttributes } from './creatingFunctions';
+import {
+    dragNdrop,
+    savedEpisodes,
+    getEpisodes,
+    createChosenEpisode,
+    getElemPos,
+    moveAt
+} from './dnd';
+import axios from 'axios';
 
 let films = {},
-    totalSeasons, 
+    totalSeasons,
     serieTitle,
     dragEpisode,
     season = document.getElementById('season'),
@@ -12,68 +20,64 @@ let films = {},
     drop = document.getElementsByClassName('drop')[0],
     seriesInp = document.getElementById('series');
 seriesInp.addEventListener('change', function () {
-    getFilms(seriesInp.value, 1,  createSeasons);});
+    getFilms(seriesInp.value, 1, createSeasons);
+});
 season.addEventListener('change', function () {
-    getFilms(seriesInp.value, season.value, function(){});
+    getFilms(seriesInp.value, season.value, function () {});
 });
 
-window.onload = function () {
-    getFilms(seriesInp.value,1, createSeasons);
-};
+window.addEventListener('load', function () {
+    getFilms(seriesInp.value, 1, createSeasons);
+    getEpisodes();
+});
 
-function getFilms(id, season = 1, callback) {
-    let XHR = (new XMLHttpRequest()) ? XMLHttpRequest : XDomainRequest;
-    let xhr = new XHR();
-    xhr.open('post', `http://www.omdbapi.com/?i=${id}&Season=${season}&type=series&apikey=30347daa`, true);
+function drawFilms(films) {
+    dragContent.innerHTML = '';
+    if (document.getElementsByClassName('head')[0]) {
+        document.getElementsByClassName('head')[0].remove();
+    }
+    let { Season } = films;
+    let h2 = createElement('h2', 'head', `Season ${Season}`);
+    let { Episodes, Title } = films;
+    serieTitle = Title;
+    drag.insertBefore(h2, dragContent);
+    for (let i = 0; i < Episodes.length; i++) {
+        drawEpisode(Episodes[i]);
+    }
 
-    xhr.onload = function () {
-        films = JSON.parse(this.responseText);
-        let {totalSeasons} = films;
-        drawFilms(films);
+    function drawEpisode(film) {
+        let { Title, Released, Episode, imdbRating } = film;
+        let div = createElement('div', 'episode');
+        setAttributes(div, {
+            'data-serieTitle': serieTitle,
+            'data-episodeTitle': Title,
+            'data-data': Released,
+            'data-episode': Episode,
+            'data-rating': imdbRating,
+            'data-serialid': seriesInp.value
+        });
+        dragContent.appendChild(div);
+        let p = createElement('p', 'title', `${Episode}) ${Title}`);
+        let rating = imdbRating === 'N/A' ? 'Unknown' : imdbRating
+        let meta = createElement('p', 'meta', `Episode released: ${Released} <b>Rating: ${rating}</b>`);
+        div.appendChild(p);
+        div.appendChild(meta);
+        div.addEventListener('mousedown', function (e) {
+            dragNdrop(e, this);
+        });
+
+    }
+}
+
+async function getFilms(id, season = 1, callback) {
+    try {
+        const { data } = await axios.post(`http://www.omdbapi.com/?i=${id}&Season=${season}&type=series&apikey=30347daa`)
+        let { totalSeasons } = data;
+        drawFilms(data);
         callback(totalSeasons);
-
-        function drawFilms(films) {
-            dragContent.innerHTML='';
-            if(document.getElementsByClassName('head')[0]){
-                document.getElementsByClassName('head')[0].remove();
-            }
-            let {Season} = films; 
-            let h2 = createElement('h2','head',`Season ${Season}`);
-            let {Episodes, Title} = films;
-            serieTitle = Title;
-            drag.insertBefore(h2,dragContent);
-            for (let i = 0; i < Episodes.length; i++) {
-                drawEpisode(Episodes[i]);
-            }
-            function drawEpisode(film) {
-            let {Title,Released,Episode,imdbRating} = film;
-                let div = createElement('div', 'episode');
-                setAttributes(div, {
-                    'data-serieTitle':serieTitle,
-                    'data-episodeTitle': Title,
-                    'data-data': Released,
-                    'data-episode': Episode,
-                    'data-rating': imdbRating
-                });
-                dragContent.appendChild(div);
-                let p = createElement('p', 'title', `${Episode}) ${Title}`);
-                let meta = createElement('p', 'meta', `Episode released: ${Released} <b>Rating: ${(imdbRating=='N/A')?'Unknown':imdbRating}</b>`);
-                div.appendChild(p);
-                div.appendChild(meta);
-               div.addEventListener('mousedown',function(e){
-                    dragNdrop(e,this);
-                });
-                
-            }
-        }
+    } catch (error) {
+        if (error.code = 500) console.log('server not response')
     }
-
-    xhr.onerror = function () {
-        console.log('Ошибка ' + this.status);
-        dragContent.innerHTML = 'Sorry, we have some problems!';
-    }
-
-    xhr.send();
 }
 
 function createSeasons(totalSeasons) {

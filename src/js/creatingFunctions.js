@@ -10,5 +10,12 @@ export function setAttributes(el, attrs) {
         el.setAttribute(key, attrs[key]);
     }
 }
-
-//export default {createElement, setAttributes};
+export function createEpisodeContent (serialTitle, serialID, episodeTitle, date, rating, seasonVal, episode) {
+    this.serialTitle = serialTitle;
+    this.serialID = serialID;
+    this.episodeTitle = episodeTitle;
+    this.date = date;
+    this.rating = rating;
+    this.season = seasonVal;
+    this.episode = episode;
+}

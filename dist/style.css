@@ -15,7 +15,7 @@ body{
 }
 .col{
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     flex-direction: column;
 }
 .drag, 
@@ -46,7 +46,7 @@ body{
 #dragContent,
 #dropContent{
     max-height: 60vh;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 .tmp{
     width: 300px;
@@ -68,8 +68,40 @@ body{
     position: absolute;
     top:7px;
     right: 7px;
-    height: 10px;
-    width: 10px;
+    height: 15px;
+    width: 15px;
     padding: 0;
     background-color: orangered;
+}
+.container>.col{
+    width: 45%;
+}
+#posterImg{
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+span{
+    text-transform: capitalize;
+    font-weight: 600;
+    font-size: 1.2em;
+    display: block;
+}
+.col>p{
+    margin: 5px;
+}
+.inline span{display: inline;}
+.episode a{
+    color: #424242;
+    text-decoration: none;
+}
+.back{
+    color: #424242;
+    text-decoration: none;
+    display: block;
+    padding: 20px;
+}
+.stars svg{
+    height: 25px;
+    width: 25px;
 }
