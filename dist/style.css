@@ -100,8 +100,34 @@ span{
     text-decoration: none;
     display: block;
     padding: 20px;
+    border-radius: 10px;    
+}
+.back:hover{
+    background-color: #e4e4e4;
 }
 .stars svg{
     height: 25px;
     width: 25px;
+}
+form{
+    width: 100%;
+    margin-top: 10px;
+    display: none;
+}
+#commentText{
+    width: 100%;
+    display: block;
+    resize: vertical;
+    box-sizing: border-box;
+    padding: 15px;
+    border-radius: 10px;
+    
+}
+.send-comment,
+#comment{
+    background-color: rgb(0, 0, 255);
+    color: #fefefe;
+    border-radius: 10px;
+    padding: 10px 20px;
+    margin: 10px 0;
 }

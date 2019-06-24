@@ -34,7 +34,13 @@
         
     </div>
 </div>
- <div class="container"><a href="index.html" class="back">Back</a></div>
-<script src="serial.js"></script>       
+ <div class="container"><a href="index.html" class="back">Back</a>
+ <button id="comment" type="button">Leave comment</button>
+ <form action='post' id = 'comment-form'>
+     <textarea name="comment" id="commentText" cols="30" rows="10"></textarea>
+     <input type="submit" value="Send" class="send-comment">
+ </form>
+ </div>
+<script src="serial.js"></script>     
 </body>
 </html>
